@@ -66,6 +66,11 @@
                     </div>
                     <input type="submit" value="Save" class="btn btn-primary my-2">
                 </form>
+
+                <form action="{{ route('site.delete', ['site' => $site->id]) }}" method="post">
+                    @csrf
+                    <input type="submit" value="Delete this site" class="btn btn-error mt-10">
+                </form>
             </div>
 
         </div>

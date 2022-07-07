@@ -2,6 +2,11 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            @if (Auth::check())
+            <div class="text-right">
+                <a class="btn btn-accent" href="{{ route('site.create') }}">Create</a>
+            </div>
+            @endif
             @foreach ($sites as $site)
             <div class="card block bg-base-100 text-base-content shadow-md my-2 hover:shadow-xl hover:bg-base-200">
                 <a class="card-body" href="{{ route('site.view', ['site' => $site->uuid]) }}">

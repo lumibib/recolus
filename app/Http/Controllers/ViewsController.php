@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use App\Models\Site;
 use App\Models\Record;
 use Akaunting\Apexcharts\Chart;
@@ -83,6 +84,17 @@ class ViewsController extends Controller
     }
 
     /**
+     * Site create view.
+     *
+     * @param  Request $request
+     * @return View
+     */
+    public function siteCreate(Request $request)
+    {
+        return view('site-create', []);
+    }
+
+    /**
      * Site settings view.
      *
      * @param  Request $request
@@ -103,7 +115,34 @@ class ViewsController extends Controller
     }
 
     /**
-     * Site settings view.
+     * Store site settings.
+     *
+     * @param  Request $request
+     * @return View
+     */
+    public function siteStore(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|max:256',
+            'domain' => 'required|max:256',
+            'public' => 'integer|min:1|nullable',
+            'public_list' => 'integer|min:1|nullable',
+        ]);
+
+        $site = new Site;
+
+        $site->uuid = Str::uuid();
+        $site->name = $request->input('name');
+        $site->domain = $request->input('domain');
+        $site->public = $request->has('public') ? 1 : 0 ;
+        $site->public_list = $request->has('public_list') ? 1 : 0 ;
+        $site->save();
+
+        return redirect()->route('site.settings', ['site' => $site->uuid]);
+    }
+
+    /**
+     * Update site settings.
      *
      * @param  Request $request
      * @return View
@@ -134,5 +173,20 @@ class ViewsController extends Controller
         $site->save();
 
         return redirect()->route('site.settings', ['site' => $site->uuid]);
+    }
+
+    /**
+     * Remove the specified site from storage.
+     *
+     * @param  \App\Models\Site  $site
+     * @return View
+     */
+    public function siteDelete(Site $site)
+    {
+        $site->records()->delete();
+
+        $site->delete();
+
+        return redirect()->route('dashboard');
     }
 }

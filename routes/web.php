@@ -19,8 +19,11 @@ use App\Http\Controllers\ViewsController;
 Route::get('/', [ViewsController::class, 'welcome'])->name('welcome');
 
 Route::get('/dashboard', [ViewsController::class, 'welcome'])->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard/create', [ViewsController::class, 'siteCreate'])->middleware(['auth'])->name('site.create');
 Route::get('/dashboard/settings/{site}', [ViewsController::class, 'siteSettings'])->middleware(['auth'])->name('site.settings');
+Route::post('/store', [ViewsController::class, 'siteStore'])->middleware(['auth'])->name('site.store');
 Route::post('/update/{site}', [ViewsController::class, 'siteUpdate'])->middleware(['auth'])->name('site.update');
+Route::post('/delete/{site}', [ViewsController::class, 'siteDelete'])->middleware(['auth'])->name('site.delete');
 
 require __DIR__.'/auth.php';
 
