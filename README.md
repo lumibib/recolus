@@ -99,6 +99,12 @@ git checkout v2.1.0
 
 If not already installed, [install composer](https://getcomposer.org/download/).
 
+And then install required packages.
+
+```bash
+composer update --no-dev -o
+```
+
 ### 3. Install Recolus
 
 Recolus comes with an installation command that will:
@@ -142,7 +148,7 @@ php artisan recolus:update
 If you want, you can update with theses command and then run `php artisan recolus:update` again :
 
 ```bash
-git fetch origin
+git fetch origin main
 git tag -l
 git checkout LATEST_TAG
 ```

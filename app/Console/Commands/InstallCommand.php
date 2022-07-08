@@ -40,21 +40,18 @@ class InstallCommand extends Command
             // $this->configureDrivers();
             $this->configureMail();
             $this->configureRecolus();
-            $this->configureUser();
         }
 
-        $this->line('Run migrations');
+        $this->configureUser();
 
+        $this->line('Run migrations');
         $this->call('migrate', ['--force' => true]);
 
         $this->line('Run installation commands');
         // $this->call('storage:link');
         $this->call('cache:clear');
 
-        if ($this->confirm('Do you want to seed some fake data?')) {
-            $this->call('db:seed', ['--force' => true]);
-            $this->info('Fake data seeded');
-        }
+        $this->seedFakeData();
 
         $this->info('Recolus is installed ⚡');
     }
@@ -98,6 +95,10 @@ class InstallCommand extends Command
      */
     protected function configureDatabase(array $default = [])
     {
+        // Don't continue with these settings if we're not interested.
+        if (!$this->confirm('Do you want to configure the database?')) {
+            return;
+        }
         $config = array_merge([
             'DB_DRIVER'   => env('DB_DRIVER', null),
             'DB_HOST'     => env('DB_HOST', null),
@@ -321,6 +322,7 @@ class InstallCommand extends Command
 
         // We need to refresh the config to get access to the newly connected database.
         $this->getFreshConfiguration();
+        $this->call('migrate', ['--force' => true]);
 
         $user = [
             'name'     => $this->ask('Please enter your username'),
@@ -331,6 +333,19 @@ class InstallCommand extends Command
         ];
 
         User::create($user);
+    }
+
+    /**
+     * Seed fake data.
+     *
+     * @return void
+     */
+    protected function seedFakeData()
+    {
+        if ($this->confirm('Do you want to seed some fake data?')) {
+            $this->call('db:seed', ['--force' => true]);
+            $this->info('Fake data seeded');
+        }
     }
 
     /**

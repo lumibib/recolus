@@ -132,7 +132,7 @@ class UpdateCommand extends Command
     private function runComposer()
     {
 
-    $process = new Process(['composer', 'install'/*, '--no-dev', '-o', '--no-scripts'*/]);
+    $process = new Process(['composer', 'install', '--no-dev', '-o', '--no-scripts']);
         $this->line("Running 'composer install'");
 
         $process->run(function($type, $buffer) {
@@ -153,7 +153,7 @@ class UpdateCommand extends Command
     private function runPull()
     {
 
-        $process = new Process(['git', 'pull']);
+        $process = new Process(['git', 'pull', 'origin', 'main']);
         $this->line("Running 'git pull'");
 
         $process->run(function($type, $buffer) {
