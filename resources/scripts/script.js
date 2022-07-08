@@ -220,8 +220,6 @@
      */
      const sendBeacon = function (url, data) {
         var text = JSON.stringify(data);
-        //const blob = new Blob([JSON.stringify(body)], { type: 'application/json; charset=UTF-8' });
-        console.log(text);
         navigator.sendBeacon(url, text);
      }
 
