@@ -218,9 +218,11 @@
      * @param {String} url - URL to the API endpoint of the Recolus server.
      * @param {Object} body - JSON which will be send to the server.
      */
-     const sendBeacon = function (url, body) {
-        const blob = new Blob([JSON.stringify(body)], { type: 'application/json; charset=UTF-8' });
-        navigator.sendBeacon(url, blob);
+     const sendBeacon = function (url, data) {
+        var text = JSON.stringify(data);
+        //const blob = new Blob([JSON.stringify(body)], { type: 'application/json; charset=UTF-8' });
+        console.log(text);
+        navigator.sendBeacon(url, text);
      }
 
     /**

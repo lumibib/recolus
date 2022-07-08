@@ -168,12 +168,18 @@ class RecordController extends Controller
     public function update(Request $request)
     {
         /**
+         * Prepare data from beacon text/plain HTTP request.
+         * Source : https://stackoverflow.com/questions/66199232/handling-text-plain-request-in-laravel-sent-via-navigator-sendbeacon
+         */
+        $data = json_decode($request->getContent(),true);
+
+        /**
          * Prepare and update record into database.
          */
-        $record = Record::where('rid', data_get($request, 'rid'))->first();
+        $record = Record::where('rid', data_get($data, 'rid'))->first();
 
-        $record->duration = data_get($request, 'duration');
-        $record->scroll = data_get($request, 'scroll');
+        $record->duration = data_get($data, 'duration');
+        $record->scroll = data_get($data, 'scroll');
 
         $record->save();
 
