@@ -13,7 +13,7 @@
   <h3>
     <a href="https://github.com/lumibib/recolus#documentation">Documentation</a>
     <span> | </span>
-    <a href="https://ravedoni.com/recolus">Demo</a>
+    <a href="https://recolus.lumibib.ch">Demo</a>
     <span> | </span>
     <a href="https://github.com/lumibib/recolus#contributing">
       Contributing
@@ -38,6 +38,8 @@
 Self-hosted, Laravel PHP based analytics tool for those who care about privacy. Recolus runs on your own server, analyzes the traffic of your websites and provides useful statistics in a minimal interface.
 
 We believe that you don't need to track every aspect of your visitors. Recolus keeps tracked data anonymized to avoid that users are identifiable, while still providing helpful insights. It's the right tool for everyone who doesn't need a full-featured marketing analytics platform like Google Analytics or Matomo.
+
+**Demo** : [recolus.lumibib.ch](https://recolus.lumibib.ch/)
 
 
 ## Table of Contents
