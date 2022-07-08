@@ -65,6 +65,13 @@ We believe that you don't need to track every aspect of your visitors. Recolus k
 
 ## Install
 
+**Requirements**
+
+- PHP 8.0
+- Composer
+- Git
+- Minimum MySQL 8.0, MariaDB 10.2, PostgreSQL 10 or SQLite 3.28
+
 Follow this instructions to "install" Recolus.
 
 ### 1. Download the source code
