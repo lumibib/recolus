@@ -4,6 +4,16 @@
 All notable changes to this project will be documented in this file.
 <!--- END HEADER -->
 
+## [1.1.1](https://github.com/lumibib/recolus/compare/v1.1.0...v1.1.1) (2022-07-08)
+
+### Bug Fixes
+
+* Handle script beacon request over Chrome ([e993dc](https://github.com/lumibib/recolus/commit/e993dc1d8a92b3109f0668970da562b0a347f2e0))
+* Install and update command process ([80936c](https://github.com/lumibib/recolus/commit/80936cca76b07a33d76bc85602cd23bf911c9576))
+
+
+---
+
 ## [1.1.0](https://github.com/lumibib/recolus/compare/v1.0.0...v1.1.0) (2022-07-07)
 
 ### Features
