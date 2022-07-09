@@ -54,7 +54,8 @@
             "@php artisan key:generate --ansi"
         ],
         "changelog": "conventional-changelog",
-        "release": "conventional-changelog --commit"
+        "release": "conventional-changelog --commit",
+        "pint": "./vendor/bin/pint -v"
     },
     "extra": {
         "laravel": {
