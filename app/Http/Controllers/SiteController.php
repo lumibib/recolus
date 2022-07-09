@@ -2,35 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use Akaunting\Apexcharts\Chart;
+use App\Models\Record;
+use App\Models\Site;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Site;
-use App\Models\Record;
-use Akaunting\Apexcharts\Chart;
+use Illuminate\Support\Facades\DB;
 
 class SiteController extends Controller
 {
-
     /**
      * Variables.
      *
      * @var string
      */
     protected $period;
+
     protected $site;
+
     protected $variable;
 
     /**
      * View site data.
      *
-     * @param  Request $request
+     * @param  Request  $request
      * @return View
      */
     public function view(Request $request, $site)
     {
-
         $site = Site::where('uuid', $site)->first();
 
         if (empty($site)) {
@@ -38,7 +38,7 @@ class SiteController extends Controller
         }
 
         /* Hide not public site and for not connected user */
-        if (!$site->public && !Auth::check()) {
+        if (! $site->public && ! Auth::check()) {
             abort(403, 'Web analysis of the site not publicly accessible.');
         }
 
@@ -80,8 +80,7 @@ class SiteController extends Controller
                 'name' => 'Visitors',
                 'description' => 'Total of each visitor\'s first visit in a single day',
                 'unit' => 'visitors',
-                'value' =>
-                    Record::query()
+                'value' => Record::query()
                     ->where('site_id', $this->site->id)
                     ->where('is_first_visit', 1)
                     ->scopes(['period' => [$this->period], 'variable' => [$this->variable]])
@@ -135,7 +134,7 @@ class SiteController extends Controller
             ->scopes(['period' => [$this->period], 'variable' => [$this->variable]])
             ->select('referrer as source', DB::raw('count(*) as total'), DB::raw('COUNT(*) * 100.0 / SUM(COUNT(*)) OVER () AS percentage'))
             ->whereNot(function ($query) {
-                $query->where('referrer', 'like','%'.$this->site->domain.'%');
+                $query->where('referrer', 'like', '%'.$this->site->domain.'%');
             })
             ->orWhereNull('referrer')
             ->groupBy('source')
@@ -217,8 +216,8 @@ class SiteController extends Controller
             $groupQueryType = "CONCAT(CAST(DATE(created_at) AS CHAR), ' ', CAST(HOUR(created_at) AS CHAR), ':00:00') AS date";
         } elseif (str($this->period)->contains('months')) {
             /* Period : week */
-            $groupQueryType = "DATE(created_at + INTERVAL (6 - WEEKDAY(created_at)) DAY) AS date";
-            /* Period : month */
+            $groupQueryType = 'DATE(created_at + INTERVAL (6 - WEEKDAY(created_at)) DAY) AS date';
+        /* Period : month */
             // $groupQueryType = "CAST(LAST_DAY(created_at) AS CHAR) AS date";
         } else {
             $groupQueryType = 'DATE(created_at) AS date';
@@ -265,7 +264,7 @@ class SiteController extends Controller
         ->setXaxisType('datetime')
         ->setYaxisTickAmount(1)
         ->setYaxisLabels([
-            '-' => '-'
+            '-' => '-',
         ])
         ->setSeries([
             [

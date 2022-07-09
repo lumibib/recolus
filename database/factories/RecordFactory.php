@@ -23,7 +23,7 @@ class RecordFactory extends Factory
                 '58fae803969f8257e0acbb6d702360e25bfe42fa163a7e2b31adb578d041c3c0',
                 '026135e319ed7c0f813dd0a2ca9aaa4edfb59f48edc3cbb38ca2a6f8dd85e13b',
                 '81394707aaae019cc7b9f2dd60acc9e8c2a39e643550215a8a36b7603f09ec77',
-                '7sjhd830fjaf8257e0acbb6d702360e25bfe42fa163a7e2b31adbjs836dkao8'
+                '7sjhd830fjaf8257e0acbb6d702360e25bfe42fa163a7e2b31adbjs836dkao8',
             ]),
             'is_first_visit' => fake()->randomElement([0, 1]),
             'type' => fake()->randomElement(['page']),
@@ -40,7 +40,7 @@ class RecordFactory extends Factory
             'platform_version' => fake()->randomElement(['10_15_7', '10_13_2', '8']),
             'device' => fake()->randomElement(['desktop', 'tablet', 'mobile']),
             'language' => fake()->randomElement(['fr', 'de', 'en', fake()->languageCode()]),
-            'referrer' => fake()->randomElement([NULL, env('APP_URL').'/lorem', 'https://google.com', 'https://twitter.com']),
+            'referrer' => fake()->randomElement([null, env('APP_URL').'/lorem', 'https://google.com', 'https://twitter.com']),
             'timezone' => fake()->randomElement(['Europe/Zurich', 'Europe/Paris', 'America/New_York', 'Europe/Berlin', fake()->timezone()]),
             'country' => fake()->randomElement(['CH', 'FR', 'USA', 'DE', fake()->countryCode()]),
             'screen' => fake()->randomElement([
@@ -51,7 +51,7 @@ class RecordFactory extends Factory
                 ['width' => 720, 'height' => 963],
                 ['width' => 840, 'height' => 1680],
             ]),
-            'utm' => NULL,
+            'utm' => null,
             'duration' => fake()->numberBetween(1, 200),
             'scroll' => fake()->randomElement([0, fake()->numberBetween(1, 100)]),
             'ts' => fake()->unixTime(),

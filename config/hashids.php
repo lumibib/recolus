@@ -40,7 +40,7 @@ return [
         'main' => [
             'salt' => '',
             'length' => 12,
-            'alphabet' => 'abcdefghijklmnopqrstuvwxyz'
+            'alphabet' => 'abcdefghijklmnopqrstuvwxyz',
         ],
 
         'alternative' => [

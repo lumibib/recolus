@@ -2,11 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Models\User;
 
 class InstallCommand extends Command
 {
@@ -32,7 +32,6 @@ class InstallCommand extends Command
      */
     public function handle()
     {
-
         if ($this->confirm('Do you want to configure Recolus before installing?')) {
             $this->configureEnvironmentFile();
             $this->configureKey();
@@ -89,30 +88,29 @@ class InstallCommand extends Command
     /**
      * Configure the database.
      *
-     * @param array $default
-     *
+     * @param  array  $default
      * @return void
      */
     protected function configureDatabase(array $default = [])
     {
         // Don't continue with these settings if we're not interested.
-        if (!$this->confirm('Do you want to configure the database?')) {
+        if (! $this->confirm('Do you want to configure the database?')) {
             return;
         }
         $config = array_merge([
-            'DB_DRIVER'   => env('DB_DRIVER', null),
-            'DB_HOST'     => env('DB_HOST', null),
+            'DB_DRIVER' => env('DB_DRIVER', null),
+            'DB_HOST' => env('DB_HOST', null),
             'DB_DATABASE' => env('DB_DATABASE', null),
             'DB_USERNAME' => env('DB_USERNAME', null),
             'DB_PASSWORD' => env('DB_PASSWORD', null),
-            'DB_PORT'     => env('DB_PORT', null),
-            'DB_PREFIX'   => env('DB_PREFIX', null),
+            'DB_PORT' => env('DB_PORT', null),
+            'DB_PREFIX' => env('DB_PREFIX', null),
         ], $default);
 
         $config['DB_DRIVER'] = $this->choice('Which database driver do you want to use?', [
-            'mysql'      => 'MySQL',
-            'pgsql'      => 'PostgreSQL',
-            'sqlite'     => 'SQLite',
+            'mysql' => 'MySQL',
+            'pgsql' => 'PostgreSQL',
+            'sqlite' => 'SQLite',
         ], $config['DB_DRIVER']);
 
         if ($config['DB_DRIVER'] === 'sqlite') {
@@ -142,7 +140,7 @@ class InstallCommand extends Command
         // Format the settings ready to display them in the table.
         $this->formatConfigsTable($config);
 
-        if (!$this->confirm('Are these settings correct?')) {
+        if (! $this->confirm('Are these settings correct?')) {
             return $this->configureDatabase($config);
         }
 
@@ -154,28 +152,27 @@ class InstallCommand extends Command
     /**
      * Configure other drivers.
      *
-     * @param array $default
-     *
+     * @param  array  $default
      * @return void
      */
     protected function configureDrivers(array $default = [])
     {
         $config = array_merge([
-            'CACHE_DRIVER'   => null,
+            'CACHE_DRIVER' => null,
             'SESSION_DRIVER' => null,
-            'QUEUE_DRIVER'   => null,
+            'QUEUE_DRIVER' => null,
         ], $default);
 
         // Format the settings ready to display them in the table.
         $this->formatConfigsTable($config);
 
         $config['CACHE_DRIVER'] = $this->choice('Which cache driver do you want to use?', [
-            'apc'       => 'APC(u)',
-            'array'     => 'Array',
-            'database'  => 'Database',
-            'file'      => 'File (default)',
+            'apc' => 'APC(u)',
+            'array' => 'Array',
+            'database' => 'Database',
+            'file' => 'File (default)',
             'memcached' => 'Memcached',
-            'redis'     => 'Redis',
+            'redis' => 'Redis',
         ], $config['CACHE_DRIVER']);
 
         // We need to configure Redis.
@@ -184,12 +181,12 @@ class InstallCommand extends Command
         }
 
         $config['SESSION_DRIVER'] = $this->choice('Which session driver do you want to use?', [
-            'apc'       => 'APC(u)',
-            'array'     => 'Array',
-            'database'  => 'Database',
-            'file'      => 'File (default)',
+            'apc' => 'APC(u)',
+            'array' => 'Array',
+            'database' => 'Database',
+            'file' => 'File (default)',
             'memcached' => 'Memcached',
-            'redis'     => 'Redis',
+            'redis' => 'Redis',
         ], $config['SESSION_DRIVER']);
 
         // We need to configure Redis.
@@ -198,12 +195,12 @@ class InstallCommand extends Command
         }
 
         $config['QUEUE_DRIVER'] = $this->choice('Which queue driver do you want to use?', [
-            'null'       => 'None',
-            'sync'       => 'Synchronous',
-            'database'   => 'Database (default)',
+            'null' => 'None',
+            'sync' => 'Synchronous',
+            'database' => 'Database (default)',
             'beanstalkd' => 'Beanstalk',
-            'sqs'        => 'Amazon SQS',
-            'redis'      => 'Redis',
+            'sqs' => 'Amazon SQS',
+            'redis' => 'Redis',
         ], $config['QUEUE_DRIVER']);
 
         // We need to configure Redis, but only if the cache driver wasn't redis.
@@ -214,7 +211,7 @@ class InstallCommand extends Command
         // Format the settings ready to display them in the table.
         $this->formatConfigsTable($config);
 
-        if (!$this->confirm('Are these settings correct?')) {
+        if (! $this->confirm('Are these settings correct?')) {
             return $this->configureDrivers($config);
         }
 
@@ -226,40 +223,39 @@ class InstallCommand extends Command
     /**
      * Configure mail.
      *
-     * @param array $config
-     *
+     * @param  array  $config
      * @return void
      */
     protected function configureMail(array $config = [])
     {
         $config = array_merge([
-            'MAIL_DRIVER'     => null,
-            'MAIL_HOST'       => null,
-            'MAIL_PORT'       => null,
-            'MAIL_USERNAME'   => null,
-            'MAIL_PASSWORD'   => null,
-            'MAIL_ADDRESS'    => null,
-            'MAIL_NAME'       => null,
+            'MAIL_DRIVER' => null,
+            'MAIL_HOST' => null,
+            'MAIL_PORT' => null,
+            'MAIL_USERNAME' => null,
+            'MAIL_PASSWORD' => null,
+            'MAIL_ADDRESS' => null,
+            'MAIL_NAME' => null,
             'MAIL_ENCRYPTION' => null,
         ], $config);
 
         // Don't continue with these settings if we're not interested in notifications.
-        if (!$this->confirm('Do you want Recolus to send mail notifications?')) {
+        if (! $this->confirm('Do you want Recolus to send mail notifications?')) {
             return;
         }
 
         $config['MAIL_DRIVER'] = $this->choice('What driver do you want to use to send notifications?', [
-            'smtp'      => 'SMTP',
-            'mail'      => 'Mail',
-            'sendmail'  => 'Sendmail',
-            'mailgun'   => 'Mailgun',
-            'mandrill'  => 'Mandrill',
-            'ses'       => 'Amazon SES',
+            'smtp' => 'SMTP',
+            'mail' => 'Mail',
+            'sendmail' => 'Sendmail',
+            'mailgun' => 'Mailgun',
+            'mandrill' => 'Mandrill',
+            'ses' => 'Amazon SES',
             'sparkpost' => 'SparkPost',
-            'log'       => 'Log (Testing)',
+            'log' => 'Log (Testing)',
         ]);
 
-        if (!$config['MAIL_DRIVER'] === 'log') {
+        if (! $config['MAIL_DRIVER'] === 'log') {
             if ($config['MAIL_DRIVER'] === 'smtp') {
                 $config['MAIL_HOST'] = $this->ask('Please supply your mail server host');
             }
@@ -272,7 +268,7 @@ class InstallCommand extends Command
         // Format the settings ready to display them in the table.
         $this->formatConfigsTable($config);
 
-        if (!$this->confirm('Are these settings correct?')) {
+        if (! $this->confirm('Are these settings correct?')) {
             return $this->configureMail($config);
         }
 
@@ -284,8 +280,7 @@ class InstallCommand extends Command
     /**
      * Configure Recolus.
      *
-     * @param array $config
-     *
+     * @param  array  $config
      * @return void
      */
     protected function configureRecolus(array $config = [])
@@ -295,12 +290,12 @@ class InstallCommand extends Command
             $config['APP_NAME'] = $this->ask('What is the application name?');
             $config['APP_URL'] = $this->ask('What is the application URL?');
             $config['APP_ENV'] = $this->choice('What is the application environment?', [
-                'local'      => 'Local',
-                'production'      => 'Production',
+                'local' => 'Local',
+                'production' => 'Production',
             ]);
             $config['APP_DEBUG'] = $this->choice('Would you like to debug the app?', [
-                'true'      => 'Yes (local environment)',
-                'false'      => 'No (production environment)',
+                'true' => 'Yes (local environment)',
+                'false' => 'No (production environment)',
             ]);
         }
 
@@ -316,7 +311,7 @@ class InstallCommand extends Command
      */
     protected function configureUser()
     {
-        if (!$this->confirm('Do you want to create an admin user?')) {
+        if (! $this->confirm('Do you want to create an admin user?')) {
             return;
         }
 
@@ -325,11 +320,11 @@ class InstallCommand extends Command
         $this->call('migrate', ['--force' => true]);
 
         $user = [
-            'name'     => $this->ask('Please enter your username'),
-            'email'    => $this->ask('Please enter your email'),
+            'name' => $this->ask('Please enter your username'),
+            'email' => $this->ask('Please enter your email'),
             'password' => Hash::make($this->secret('Please enter your password')),
             'email_verified_at' => now(),
-            'remember_token'    => Str::random(10),
+            'remember_token' => Str::random(10),
         ];
 
         User::create($user);
@@ -356,9 +351,9 @@ class InstallCommand extends Command
     protected function configureRedis()
     {
         $config = [
-            'REDIS_HOST'     => null,
+            'REDIS_HOST' => null,
             'REDIS_DATABASE' => null,
-            'REDIS_PORT'     => null,
+            'REDIS_PORT' => null,
         ];
 
         $config['REDIS_HOST'] = $this->ask('What is the host of your redis server?');
@@ -373,8 +368,7 @@ class InstallCommand extends Command
     /**
      * Format the configs into a pretty table that we can easily read.
      *
-     * @param array $config
-     *
+     * @param  array  $config
      * @return void
      */
     protected function formatConfigsTable(array $config)
@@ -402,9 +396,8 @@ class InstallCommand extends Command
     /**
      * Writes to the .env file with given parameters.
      *
-     * @param string $key
-     * @param mixed  $value
-     *
+     * @param  string  $key
+     * @param  mixed  $value
      * @return void
      */
     protected function writeEnv($key, $value)
@@ -414,10 +407,10 @@ class InstallCommand extends Command
 
         $path = app()->environmentFilePath();
 
-        if($envValue !== null) {
+        if ($envValue !== null) {
             file_put_contents($path, str_replace(
-                $envKey . '=' . $envValue,
-                $envKey . '=' . $value,
+                $envKey.'='.$envValue,
+                $envKey.'='.$value,
                 file_get_contents(app()->environmentFilePath())
             ));
         } else {

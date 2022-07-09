@@ -38,7 +38,7 @@ class Record extends Model
     {
         return $query->whereBetween('created_at', [
             data_get(config('recolus.periods.'.$period), 'start'),
-            data_get(config('recolus.periods.'.$period), 'end')
+            data_get(config('recolus.periods.'.$period), 'end'),
         ]);
     }
 

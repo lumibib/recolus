@@ -24,7 +24,7 @@ class UpdateCommand extends Command
     /**
      * Is the code already updated or not
      *
-     * @var boolean
+     * @var bool
      */
     private $alreadyUpToDate;
 
@@ -52,34 +52,32 @@ class UpdateCommand extends Command
         $this->call('down');
 
         if ($this->confirm('Have you fetched the latest version (from git or manually) ?')) {
-            $this->line("Good, go ahead");
+            $this->line('Good, go ahead');
         } else {
             if ($this->confirm('Would you like to pull latest version from Git?')) {
-
                 $updateMethod = $this->choice('Which method would you like to use?', [
                     'automatic_git' => 'Automatically (git)',
                     'manual_git' => 'Manually (git)',
                 ]);
 
                 if ($updateMethod === 'automatic_git') {
-                    if(!$this->runPull()) {
-
+                    if (! $this->runPull()) {
                         $this->error("An error occurred while executing 'git pull'. \nLogs:");
 
-                        foreach($this->pullLog as $logLine) {
+                        foreach ($this->pullLog as $logLine) {
                             $this->info($logLine);
                         }
 
                         return;
                     }
 
-                    if($this->alreadyUpToDate) {
-                        $this->info("The application is already up-to-date");
+                    if ($this->alreadyUpToDate) {
+                        $this->info('The application is already up-to-date');
                     }
                 } elseif ($updateMethod === 'manual_git') {
-                    $this->warn("Fetch latest version manually with git.");
+                    $this->warn('Fetch latest version manually with git.');
                     $this->newLine();
-                    $this->line("1. Fetch latest version running:");
+                    $this->line('1. Fetch latest version running:');
                     $this->newLine();
                     $this->line('git fetch origin');
                     $this->line('git tag -l');
@@ -87,26 +85,27 @@ class UpdateCommand extends Command
                     $this->newLine();
                     $this->line("2. Run 'php artisan reculus:update' again.");
                     $this->newLine();
-                    return ;
+
+                    return;
                 }
             } else {
-                $this->warn("Please download latest version manually going to :");
+                $this->warn('Please download latest version manually going to :');
                 $this->newLine();
-                $this->line("https://github.com/lumibib/recolus");
+                $this->line('https://github.com/lumibib/recolus');
                 $this->newLine();
-                $this->line("1. Update the application files.");
+                $this->line('1. Update the application files.');
                 $this->line("2. Run 'php artisan reculus:update' again.");
                 $this->newLine();
-                return ;
+
+                return;
             }
         }
 
         if ($this->confirm('Would you like to run composer update?')) {
-            if(!$this->runComposer()) {
-
+            if (! $this->runComposer()) {
                 $this->error("Error while updating composer files. \nLogs:");
 
-                foreach($this->composerLog as $logLine) {
+                foreach ($this->composerLog as $logLine) {
                     $this->info($logLine);
                 }
 
@@ -126,46 +125,38 @@ class UpdateCommand extends Command
     /**
      * Run composer install process
      *
-     * @return boolean
+     * @return bool
      */
-
     private function runComposer()
     {
-
-    $process = new Process(['composer', 'install', '--no-dev', '-o', '--no-scripts']);
+        $process = new Process(['composer', 'install', '--no-dev', '-o', '--no-scripts']);
         $this->line("Running 'composer install'");
 
-        $process->run(function($type, $buffer) {
+        $process->run(function ($type, $buffer) {
             $this->composerLog[] = $buffer;
         });
 
-
         return $process->isSuccessful();
-
     }
 
     /**
      * Run git pull process
      *
-     * @return boolean
+     * @return bool
      */
-
     private function runPull()
     {
-
         $process = new Process(['git', 'pull', 'origin', 'main']);
         $this->line("Running 'git pull'");
 
-        $process->run(function($type, $buffer) {
+        $process->run(function ($type, $buffer) {
             $this->pullLog[] = $buffer;
 
-            if($buffer == "Already up to date.\n") {
-                $this->alreadyUpToDate = TRUE;
+            if ($buffer == "Already up to date.\n") {
+                $this->alreadyUpToDate = true;
             }
-
         });
 
         return $process->isSuccessful();
-
     }
 }

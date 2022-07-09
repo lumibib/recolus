@@ -1,9 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Models\Site;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\ViewsController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------

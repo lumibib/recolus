@@ -2,30 +2,31 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use App\Models\Site;
-use App\Models\Record;
 use Akaunting\Apexcharts\Chart;
+use App\Models\Record;
+use App\Models\Site;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class ViewsController extends Controller
 {
-
     /**
      * Variables.
      *
      * @var string
      */
     protected $period;
+
     protected $site;
+
     protected $variable;
 
     /**
      * Welcome view.
      *
-     * @param  Request $request
+     * @param  Request  $request
      * @return View
      */
     public function welcome(Request $request)
@@ -39,7 +40,7 @@ class ViewsController extends Controller
         $miniSitesCharts = [];
         foreach ($sites as $site) {
             $miniSitesCharts[] = $this->miniPagesSiteChart($site->id);
-        };
+        }
 
         return view('welcome', [
             'sites' => $sites,
@@ -49,7 +50,6 @@ class ViewsController extends Controller
 
     protected function miniPagesSiteChart($siteId)
     {
-
         $pageViewsQuery = Record::query()
                     ->select([
                         DB::raw('DATE(created_at + INTERVAL (6 - WEEKDAY(created_at)) DAY) AS date'),
@@ -86,7 +86,7 @@ class ViewsController extends Controller
     /**
      * Site create view.
      *
-     * @param  Request $request
+     * @param  Request  $request
      * @return View
      */
     public function siteCreate(Request $request)
@@ -97,7 +97,7 @@ class ViewsController extends Controller
     /**
      * Site settings view.
      *
-     * @param  Request $request
+     * @param  Request  $request
      * @return View
      */
     public function siteSettings(Request $request, $site)
@@ -108,7 +108,6 @@ class ViewsController extends Controller
             abort(404);
         }
 
-
         return view('site-settings', [
             'site' => $site,
         ]);
@@ -117,7 +116,7 @@ class ViewsController extends Controller
     /**
      * Store site settings.
      *
-     * @param  Request $request
+     * @param  Request  $request
      * @return View
      */
     public function siteStore(Request $request)
@@ -134,8 +133,8 @@ class ViewsController extends Controller
         $site->uuid = Str::uuid();
         $site->name = $request->input('name');
         $site->domain = $request->input('domain');
-        $site->public = $request->has('public') ? 1 : 0 ;
-        $site->public_list = $request->has('public_list') ? 1 : 0 ;
+        $site->public = $request->has('public') ? 1 : 0;
+        $site->public_list = $request->has('public_list') ? 1 : 0;
         $site->save();
 
         return redirect()->route('site.settings', ['site' => $site->uuid]);
@@ -144,7 +143,7 @@ class ViewsController extends Controller
     /**
      * Update site settings.
      *
-     * @param  Request $request
+     * @param  Request  $request
      * @return View
      */
     public function siteUpdate(Request $request, $site)
@@ -166,8 +165,8 @@ class ViewsController extends Controller
 
         $site->name = $request->input('name');
         $site->domain = $request->input('domain');
-        $site->public = $request->has('public') ? 1 : 0 ;
-        $site->public_list = $request->has('public_list') ? 1 : 0 ;
+        $site->public = $request->has('public') ? 1 : 0;
+        $site->public_list = $request->has('public_list') ? 1 : 0;
         $site->domain_whitelist = $request->input('domain_whitelist');
         $site->ignore_paths = $request->input('ignore_paths');
         $site->save();

@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Record;
 use App\Models\Site;
+use Illuminate\Http\Request;
 use Jenssegers\Agent\Agent;
-use Illuminate\Support\Facades\Crypt;
 
 class RecordController extends Controller
 {
     /**
      * Collect record from script HTTP POST request.
      *
-     * @param  Request $request
+     * @param  Request  $request
      * @return JSON
      */
     public function collect(Request $request)
@@ -162,7 +161,7 @@ class RecordController extends Controller
     /**
      * Update record from script HTTP POST request.
      *
-     * @param  Request $request
+     * @param  Request  $request
      * @return JSON
      */
     public function update(Request $request)
@@ -171,7 +170,7 @@ class RecordController extends Controller
          * Prepare data from beacon text/plain HTTP request.
          * Source : https://stackoverflow.com/questions/66199232/handling-text-plain-request-in-laravel-sent-via-navigator-sendbeacon
          */
-        $data = json_decode($request->getContent(),true);
+        $data = json_decode($request->getContent(), true);
 
         /**
          * Prepare and update record into database.
